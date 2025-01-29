@@ -1,0 +1,37 @@
+DROP DATABASE IF EXISTS longshanks;
+CREATE DATABASE longshanks;
+USE longshanks;
+CREATE TABLE market_data_points (
+    id VARCHAR(255) PRIMARY KEY, -- Unique identifier
+    ticker VARCHAR(10) NOT NULL,
+    timestamp DATETIME NOT NULL,
+    open DECIMAL(18, 4),
+    high DECIMAL(18, 4),
+    low DECIMAL(18, 4),
+    close DECIMAL(18, 4),
+    volume BIGINT
+);
+CREATE TABLE stock_fundamentals (
+    ticker VARCHAR(10) PRIMARY KEY, -- Primary key
+    pe_ratio DECIMAL(18, 4),
+    pb_ratio DECIMAL(18, 4),
+    return_on_equity DECIMAL(18, 4),
+    dividend_yield DECIMAL(18, 4)
+);
+-- Insert data into market_data_points
+LOAD DATA INFILE '/path/to/market_data_points.csv'
+INTO TABLE market_data_points
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id, ticker, timestamp, open, high, low, close, volume);
+
+-- Insert data into stock_fundamentals
+LOAD DATA INFILE '/path/to/stock_fundamentals.csv'
+INTO TABLE stock_fundamentals
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(ticker, pe_ratio, pb_ratio, return_on_equity, dividend_yield);
